@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f1e8">
+  <meta name="description" content="Guzzle estimates the water footprint of LLM responses and shows its research assumptions and calculation formula.">
+  <title>Guzzle | LLM Water Use Estimate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Guzzle home">
+        <span class="wordmark-mark" aria-hidden="true">G</span>
+        <span>Guzzle</span>
+      </a>
+      <a class="header-link" href="#sources">Research and assumptions <span aria-hidden="true">&darr;</span></a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">A research-based estimate</p>
+          <h1 id="page-title">Every answer<br>has a footprint.</h1>
+          <p class="hero-intro">An AI response takes electricity to compute and water to cool the computers behind it. Researchers can estimate that footprint, but the answer changes with the model, the data center, and what gets counted.</p>
+        </div>
+        <figure class="hero-illustration" aria-label="An abstract illustration of a droplet nourishing a small sprout">
+          <span class="illustration-index">FIELD NOTE&nbsp; 01</span>
+          <svg viewBox="0 0 360 250" role="img" aria-hidden="true">
+            <circle class="illustration-sun" cx="275" cy="55" r="25" />
+            <ellipse class="illustration-orbit illustration-orbit-one" cx="180" cy="128" rx="142" ry="70" />
+            <ellipse class="illustration-orbit illustration-orbit-two" cx="180" cy="128" rx="116" ry="93" />
+            <path class="illustration-ground" d="M24 195 C92 177 135 207 189 191 S285 180 336 198" />
+            <path class="illustration-stem" d="M180 190 C181 157 177 132 183 105" />
+            <path class="illustration-leaf" d="M181 141 C149 137 139 115 142 102 C163 102 181 113 181 141Z" />
+            <path class="illustration-leaf" d="M183 123 C188 97 211 88 229 92 C227 111 208 127 183 123Z" />
+            <path class="illustration-drop" d="M180 157 C169 171 162 180 162 188 A18 18 0 0 0 198 188 C198 180 191 171 180 157Z" />
+            <path class="illustration-ground" d="M145 196 H215" />
+          </svg>
+          <figcaption>One estimate, many assumptions.</figcaption>
+        </figure>
+      </section>
+
+      <section class="calculator" aria-labelledby="calculator-title">
+        <div class="calculator-inputs">
+          <p class="eyebrow">Your estimate</p>
+          <h2 id="calculator-title">Count your AI responses</h2>
+
+          <div class="field-group">
+            <label for="response-count">How many LLM responses?</label>
+            <p class="field-help" id="response-help">Count each generated answer. A prompt and its reply count as one response, not a token count. The estimate uses a GPT-3-era research example; it does not distinguish current models or providers.</p>
+            <div class="number-input-wrap">
+              <input id="response-count" type="number" min="0" max="1000000" step="1" value="20" inputmode="numeric" aria-describedby="response-help">
+              <span>responses</span>
+            </div>
+          </div>
+
+          <fieldset class="field-group scenario-field">
+            <legend>Cooling conditions</legend>
+            <p class="field-help">Choose an endpoint from the study's modeled cooling range.</p>
+            <div class="scenario-options">
+              <label class="scenario-option">
+                <input type="radio" name="scenario" value="cool" checked>
+                <span class="scenario-card"><strong>Cooler</strong><small>0.5 L/kWh cooling</small></span>
+              </label>
+              <label class="scenario-option">
+                <input type="radio" name="scenario" value="hot">
+                <span class="scenario-card"><strong>Hotter</strong><small>5 L/kWh cooling</small></span>
+              </label>
+            </div>
+            <p class="scenario-note" id="scenario-note">This is a comparison of study assumptions, not a forecast for a specific AI provider or time of day.</p>
+          </fieldset>
+
+          <div class="included-note">
+            <span class="included-icon" aria-hidden="true">+</span>
+            <p><strong>Included:</strong> water for data-center cooling and electricity generation. <strong>Not included:</strong> water used to make hardware or train the model.</p>
+          </div>
+        </div>
+
+        <div class="calculator-results" aria-live="polite" aria-atomic="true">
+          <div class="result-heading">
+            <div>
+              <p class="eyebrow">Estimated water use</p>
+              <p class="result-value"><strong id="selected-estimate">10.5</strong><span>mL</span></p>
+              <p class="result-caption"><span id="result-count">20</span> responses · <span id="result-scenario">cooler</span> cooling assumption</p>
+            </div>
+            <span class="result-mark" aria-hidden="true">01</span>
+          </div>
+
+          <div class="range-block">
+            <div class="range-labels"><span>Full study range</span><strong id="full-range">211–569 mL</strong></div>
+            <div class="range-track" role="img" aria-label="The selected estimate is at the lower end of the modeled range">
+              <span class="range-fill" id="range-fill"></span>
+              <span class="range-marker" id="range-marker"></span>
+            </div>
+            <div class="range-endpoints"><span>cooler</span><span>hotter</span></div>
+          </div>
+
+          <div class="comparison-heading"><p class="eyebrow">Put it in lawn terms</p><p>Using the selected scenario estimate:</p></div>
+          <div class="comparisons">
+            <div class="comparison-item">
+              <span class="comparison-number" id="sprinkler-minutes">0.00</span>
+              <span class="comparison-unit">minutes</span>
+              <p>of a sprinkler running at an assumed 2 gallons per minute</p>
+            </div>
+            <div class="comparison-item">
+              <span class="comparison-number" id="lawn-area">0.0000</span>
+              <span class="comparison-unit">square feet</span>
+              <p>covered by one inch of water</p>
+            </div>
+          </div>
+
+          <div class="formula-panel" aria-labelledby="formula-title">
+            <p class="formula-title" id="formula-title">The formula</p>
+            <p class="formula-equation">Responses × 0.00396 kWh × (1.2 × 1.8 L/kWh + cooling WUE) × 1,000 mL/L</p>
+            <dl class="formula-key">
+              <div><dt>0.00396 kWh</dt><dd>study's energy estimate per GPT-3 response</dd></div>
+              <div><dt>1.2 × 1.8 L/kWh</dt><dd>data-center overhead × electricity water intensity</dd></div>
+              <div><dt>Cooling WUE</dt><dd>0.5–5 L/kWh, changed by the scenario control</dd></div>
+            </dl>
+            <p class="formula-result"><span id="per-response-range">10.5–28.4 mL</span> per response across the full modeled range.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="explanation" aria-labelledby="why-title">
+        <div class="section-intro">
+          <p class="eyebrow">Read the estimate carefully</p>
+          <h2 id="why-title">Why show a range?</h2>
+          <p>A prompt does not go to a known building. The model, data-center cooling system, local weather, and electricity supply can all change the result. A single confident number would hide those unknowns.</p>
+        </div>
+        <div class="explanation-list">
+          <article class="explanation-item">
+            <span class="item-number">01</span>
+            <div><h3>One response is not a token count</h3><p>This calculator counts generated replies. It does not measure tokens, prompt length, or a particular model's workload. Longer or more complex requests can require different amounts of computing.</p></div>
+          </article>
+          <article class="explanation-item">
+            <span class="item-number">02</span>
+            <div><h3>The timing control is a what-if</h3><p>The study says water efficiency varies with location and time. The cooler and hotter settings use the endpoints of its modeled on-site cooling range. They do not tell us where or when a commercial model ran.</p></div>
+          </article>
+          <article class="explanation-item">
+            <span class="item-number">03</span>
+            <div><h3>The lawn comparison is a scale reference</h3><p>Sprinkler time assumes a 2-gallon-per-minute flow. Lawn area estimates how much space that water would cover at one inch deep. Actual sprinklers and watering practices vary.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sources" id="sources" aria-labelledby="sources-title">
+        <div class="section-intro">
+          <p class="eyebrow">Show your work</p>
+          <h2 id="sources-title">Sources &amp; assumptions</h2>
+          <p>This calculator is a research-based illustration, not a measurement of any specific chatbot.</p>
+        </div>
+        <div class="source-content">
+          <ol class="source-list">
+            <li><strong>Li, P., Yang, J., Islam, M. A. &amp; Ren, S. (2023).</strong> <a href="https://arxiv.org/abs/2304.03271" target="_blank" rel="noopener noreferrer">“Making AI Less ‘Thirsty’: Uncovering and Addressing the Secret Water Footprint of AI Models.”</a> The paper's GPT-3 example uses 3.96 Wh per response, a power usage effectiveness (PUE) of 1.2, electricity water intensity of 1.8 L/kWh, and on-site cooling water effectiveness (WUE) from 0.5 to 5 L/kWh. Applying its formula gives about 10.5–28.4 mL per response.</li>
+            <li><strong>Lawn conversions.</strong> Sprinkler flow is set to 2 US gallons per minute as an example assumption. One US gallon spread over one square foot is about 1.604 inches deep, so one inch over one square foot is about 0.623 gallons.</li>
+          </ol>
+          <aside class="limitations"><strong>Limits:</strong> The per-response estimate reflects an older, specific research example, not a universal average for today's LLMs. Providers do not publish enough request-level operational data to verify the water used by an individual answer. The cooler/hotter comparison changes the study's on-site cooling assumption while holding its other inputs constant. It illustrates uncertainty; it does not predict real time-of-day savings.</aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><span>GUZZLE</span><span>AN ESTIMATE, NOT A MEASUREMENT</span></footer>
+  </div>
+</body>
+</html>
