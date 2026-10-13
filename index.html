@@ -61,19 +61,23 @@
           </div>
 
           <fieldset class="field-group scenario-field">
-            <legend>Cooling conditions</legend>
-            <p class="field-help">Choose an endpoint from the study's modeled cooling range.</p>
+            <legend>Data-center location example</legend>
+            <p class="field-help">The paper's estimated water use varies by location. Choose a row from its comparison.</p>
             <div class="scenario-options">
               <label class="scenario-option">
-                <input type="radio" name="scenario" value="cool" checked>
-                <span class="scenario-card"><strong>Cooler</strong><small>0.5 L/kWh cooling</small></span>
+                <input type="radio" name="scenario" value="texas">
+                <span class="scenario-card"><strong>Texas</strong><small>7.59 mL / response</small></span>
               </label>
               <label class="scenario-option">
-                <input type="radio" name="scenario" value="hot">
-                <span class="scenario-card"><strong>Hotter</strong><small>5 L/kWh cooling</small></span>
+                <input type="radio" name="scenario" value="average" checked>
+                <span class="scenario-card"><strong>U.S. average</strong><small>16.90 mL / response</small></span>
+              </label>
+              <label class="scenario-option">
+                <input type="radio" name="scenario" value="washington">
+                <span class="scenario-card"><strong>Washington</strong><small>47.51 mL / response</small></span>
               </label>
             </div>
-            <p class="scenario-note" id="scenario-note">This is a comparison of study assumptions, not a forecast for a specific AI provider or time of day.</p>
+            <p class="scenario-note" id="scenario-note">These are estimates for example data-center locations, not a prediction of where a particular provider runs your request.</p>
           </fieldset>
 
           <div class="included-note">
@@ -86,30 +90,30 @@
           <div class="result-heading">
             <div>
               <p class="eyebrow">Estimated water use</p>
-              <p class="result-value"><strong id="selected-estimate">10.5</strong><span>mL</span></p>
-              <p class="result-caption"><span id="result-count">20</span> responses · <span id="result-scenario">cooler</span> cooling assumption</p>
+              <p class="result-value"><strong id="selected-estimate">338.1</strong><span>mL</span></p>
+              <p class="result-caption"><span id="result-count">20</span> responses · <span id="result-scenario">U.S. average</span> location example</p>
             </div>
             <span class="result-mark" aria-hidden="true">01</span>
           </div>
 
           <div class="range-block">
-            <div class="range-labels"><span>Full study range</span><strong id="full-range">211–569 mL</strong></div>
-            <div class="range-track" role="img" aria-label="The selected estimate is at the lower end of the modeled range">
+            <div class="range-labels"><span>Texas–Washington examples</span><strong id="full-range">152–950 mL</strong></div>
+            <div class="range-track" role="img" aria-label="Selected estimate within the range across location examples">
               <span class="range-fill" id="range-fill"></span>
               <span class="range-marker" id="range-marker"></span>
             </div>
-            <div class="range-endpoints"><span>cooler</span><span>hotter</span></div>
+            <div class="range-endpoints"><span>Texas</span><span>Washington</span></div>
           </div>
 
           <div class="comparison-heading"><p class="eyebrow">Put it in lawn terms</p><p>Using the selected scenario estimate:</p></div>
           <div class="comparisons">
             <div class="comparison-item">
-              <span class="comparison-number" id="sprinkler-minutes">0.00</span>
-              <span class="comparison-unit">minutes</span>
+              <span class="comparison-number" id="sprinkler-seconds">2.68</span>
+              <span class="comparison-unit">seconds</span>
               <p>of a sprinkler running at an assumed 2 gallons per minute</p>
             </div>
             <div class="comparison-item">
-              <span class="comparison-number" id="lawn-area">0.0000</span>
+              <span class="comparison-number" id="lawn-area">0.1434</span>
               <span class="comparison-unit">square feet</span>
               <p>covered by one inch of water</p>
             </div>
@@ -117,13 +121,13 @@
 
           <div class="formula-panel" aria-labelledby="formula-title">
             <p class="formula-title" id="formula-title">The formula</p>
-            <p class="formula-equation">Responses × 0.00396 kWh × (1.2 × 1.8 L/kWh + cooling WUE) × 1,000 mL/L</p>
+            <p class="formula-equation">Responses × 0.004 kWh × (on-site WUE + PUE × electricity water intensity) × 1,000 mL/L</p>
             <dl class="formula-key">
-              <div><dt>0.00396 kWh</dt><dd>study's energy estimate per GPT-3 response</dd></div>
-              <div><dt>1.2 × 1.8 L/kWh</dt><dd>data-center overhead × electricity water intensity</dd></div>
-              <div><dt>Cooling WUE</dt><dd>0.5–5 L/kWh, changed by the scenario control</dd></div>
+              <div><dt>0.004 kWh</dt><dd>study's energy estimate per medium-sized GPT-3 response</dd></div>
+              <div><dt>On-site WUE</dt><dd>water used at the data center for cooling, from the selected row</dd></div>
+              <div><dt>PUE × EWIF</dt><dd>facility overhead × water used to generate electricity</dd></div>
             </dl>
-            <p class="formula-result"><span id="per-response-range">10.5–28.4 mL</span> per response across the full modeled range.</p>
+            <p class="formula-result"><span id="per-response-range">7.6–47.5 mL</span> per response across the examples shown.</p>
           </div>
         </div>
       </section>
@@ -141,7 +145,7 @@
           </article>
           <article class="explanation-item">
             <span class="item-number">02</span>
-            <div><h3>The timing control is a what-if</h3><p>The study says water efficiency varies with location and time. The cooler and hotter settings use the endpoints of its modeled on-site cooling range. They do not tell us where or when a commercial model ran.</p></div>
+            <div><h3>Location changes the estimate</h3><p>The selected examples come from Table 1 of the study. It also finds water efficiency changes over time, but these example totals do not identify the hour or actual facility used for a particular answer.</p></div>
           </article>
           <article class="explanation-item">
             <span class="item-number">03</span>
@@ -158,10 +162,10 @@
         </div>
         <div class="source-content">
           <ol class="source-list">
-            <li><strong>Li, P., Yang, J., Islam, M. A. &amp; Ren, S. (2023).</strong> <a href="https://arxiv.org/abs/2304.03271" target="_blank" rel="noopener noreferrer">“Making AI Less ‘Thirsty’: Uncovering and Addressing the Secret Water Footprint of AI Models.”</a> The paper's GPT-3 example uses 3.96 Wh per response, a power usage effectiveness (PUE) of 1.2, electricity water intensity of 1.8 L/kWh, and on-site cooling water effectiveness (WUE) from 0.5 to 5 L/kWh. Applying its formula gives about 10.5–28.4 mL per response.</li>
+            <li><strong>Li, P., Yang, J., Islam, M. A. &amp; Ren, S. (2023; v5 revised 2025).</strong> <a href="https://arxiv.org/pdf/2304.03271" target="_blank" rel="noopener noreferrer">“Making AI Less ‘Thirsty’: Uncovering and Addressing the Secret Water Footprint of AI Models.”</a> Section 3.3 assumes 0.004 kWh per medium-sized GPT-3 response. Table 1 reports total operational water per request of 7.590 mL in Texas, 16.904 mL for the U.S. average, and 47.506 mL in Washington. The calculator's 7.6–47.5 mL range compares the Texas and Washington examples shown; the paper lists other locations too. These are study estimates, not measurements of current commercial models.</li>
             <li><strong>Lawn conversions.</strong> Sprinkler flow is set to 2 US gallons per minute as an example assumption. One US gallon spread over one square foot is about 1.604 inches deep, so one inch over one square foot is about 0.623 gallons.</li>
           </ol>
-          <aside class="limitations"><strong>Limits:</strong> The per-response estimate reflects an older, specific research example, not a universal average for today's LLMs. Providers do not publish enough request-level operational data to verify the water used by an individual answer. The cooler/hotter comparison changes the study's on-site cooling assumption while holding its other inputs constant. It illustrates uncertainty; it does not predict real time-of-day savings.</aside>
+          <aside class="limitations"><strong>Limits:</strong> These are model-based GPT-3 estimates, not a universal average for today's LLMs. Providers do not publish enough request-level operational data to verify the water used by an individual answer. The selected location is an example from the paper; it does not identify where a commercial provider ran your request.</aside>
         </div>
       </section>
     </main>

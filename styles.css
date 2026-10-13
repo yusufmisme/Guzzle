@@ -58,10 +58,10 @@ h1 { margin: 17px 0 22px; font: 700 clamp(48px, 6.8vw, 78px)/.98 var(--serif); l
 .number-input-wrap > span { padding: 0 13px 0 4px; color: var(--muted); font: 10px var(--mono); }
 .scenario-field { min-width: 0; padding: 0; border: 0; }
 .scenario-field legend { padding: 0; }
-.scenario-options { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.scenario-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .scenario-option { position: relative; display: block; cursor: pointer; }
 .scenario-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.scenario-card { display: block; min-height: 65px; padding: 11px 12px; border: 1px solid var(--line); background: #fff; transition: border-color .16s ease, background .16s ease, color .16s ease; }
+.scenario-card { display: block; min-height: 65px; padding: 10px 9px; border: 1px solid var(--line); background: #fff; transition: border-color .16s ease, background .16s ease, color .16s ease; }
 .scenario-card strong, .scenario-card small { display: block; }
 .scenario-card strong { margin-bottom: 5px; font-size: 12px; }
 .scenario-card small { color: var(--muted); font: 9px var(--mono); }
